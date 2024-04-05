@@ -1,4 +1,4 @@
-import { userUserRouter } from './user-user.route'
+import { userUserRouter } from './user-user.routes'
 
 const userRoutes = {
   prefix: '/',
