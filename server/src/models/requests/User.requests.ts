@@ -3,7 +3,7 @@ import { TokenType, UserVerifyStatus } from '~/constants/enums'
 import { ParamsDictionary } from 'express-serve-static-core'
 
 export interface TokenPayload extends JwtPayload {
-  id: string
+  user_id: string
   email: string
   roles: string[]
   token_type: TokenType
@@ -22,4 +22,8 @@ export interface RegisterReqBody {
 export interface LoginReqBody {
   email: string
   password: string
+}
+
+export interface RefreshTokenReqBody {
+  refresh_token: string
 }

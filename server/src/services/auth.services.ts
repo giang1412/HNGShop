@@ -73,7 +73,8 @@ class AuthService {
       payload: {
         user_id,
         token_type: TokenType.RefreshToken,
-        verify
+        verify,
+        roles
       },
       privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string,
       options: {
