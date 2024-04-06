@@ -9,9 +9,11 @@ const port = 3400
 const routes = [{ ...userRoutes }, { ...commonRoutes }]
 
 app.use(express.json())
-app.use(defaultErrorHandler)
 
 routes.forEach((item) => item.routes.forEach((route) => app.use(item.prefix + route.path, route.route)))
+
+app.use(defaultErrorHandler)
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

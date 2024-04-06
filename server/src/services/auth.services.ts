@@ -103,6 +103,13 @@ class AuthService {
     })
   }
 
+  async checkEmailExist(email: string) {
+    const user = await databaseService.users.findOne({
+      email
+    })
+    return Boolean(user)
+  }
+
   async refreshToken({
     user_id,
     verify,
@@ -151,7 +158,6 @@ class AuthService {
         name: `user${user_id.toString()}`,
         password: hashPassword(payload.password),
         email_verify_token,
-        date_of_birth: new Date(payload.date_of_birth),
         roles: [ROLE.USER]
       })
     )
