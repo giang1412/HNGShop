@@ -5,6 +5,7 @@ import {
   oauthController,
   refreshTokenController,
   registerController,
+  resendVerifyEmailController,
   verifyEmailController
 } from '~/controllers/auth.controller'
 import {
@@ -29,4 +30,6 @@ commonAuthRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wr
 commonAuthRouter.post('/oauth/google', wrapRequestHandler(oauthController))
 
 commonAuthRouter.post('/verify-email', verifyEmailTokenValidator, wrapRequestHandler(verifyEmailController))
+
+commonAuthRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
 export default commonAuthRouter

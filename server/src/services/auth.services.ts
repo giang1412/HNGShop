@@ -329,6 +329,41 @@ class AuthService {
       refresh_token
     }
   }
+
+  async resendEmailVerify(user_id: string) {
+    const user = await databaseService.users.findOne({
+      _id: new ObjectId(user_id)
+    })
+    // Nếu không tìm thấy user thì mình sẽ báo lỗi
+    if (!user) {
+      return {
+        message: USERS_MESSAGES.USER_NOT_FOUND
+      }
+    }
+    // Đã verify rồi thì mình sẽ không báo lỗi
+    // Mà mình sẽ trả về status OK với message là đã verify trước đó rồi
+    if (user.email_verify_token === '') {
+      return { message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED_BEFORE }
+    }
+    const roles = user.roles
+    // Giả sử thay thế phương thức gửi mail bằng console.log
+    const email_verify_token = await this.signEmailVerifyToken({ user_id, verify: UserVerifyStatus.Unverified, roles })
+    console.log('Resend verify email: ', email_verify_token)
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          email_verify_token
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS
+    }
+  }
 }
 
 const authService = new AuthService()
