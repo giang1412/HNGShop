@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { LoginReqBody, RefreshTokenReqBody, RegisterReqBody, TokenPayload } from '~/models/requests/User.requests'
+import {
+  LoginReqBody,
+  LogoutReqBody,
+  RefreshTokenReqBody,
+  RegisterReqBody,
+  TokenPayload
+} from '~/models/requests/User.requests'
 import authService from '~/services/auth.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import User from '~/models/schemas/User.schema'
@@ -43,4 +49,10 @@ export const refreshTokenController = async (
     message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
     result
   })
+}
+
+export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
+  const { refresh_token } = req.body
+  const result = await authService.logout(refresh_token)
+  return res.json(result)
 }

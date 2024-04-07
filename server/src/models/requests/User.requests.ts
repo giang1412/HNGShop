@@ -27,3 +27,7 @@ export interface LoginReqBody {
 export interface RefreshTokenReqBody {
   refresh_token: string
 }
+
+export interface LogoutReqBody {
+  refresh_token: string
+}

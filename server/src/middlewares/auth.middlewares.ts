@@ -10,6 +10,7 @@ import { verifyToken } from '~/utils/jwt'
 import { Request } from 'express'
 import { capitalize } from 'lodash'
 import { JsonWebTokenError } from 'jsonwebtoken'
+import { verifyAccessToken } from '~/utils/common'
 
 const nameSchema: ParamSchema = {
   notEmpty: {
@@ -183,4 +184,20 @@ export const refreshTokenValidator = validate(
       }
     }
   })
+)
+
+export const accessTokenValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        custom: {
+          options: async (value: string, { req }) => {
+            const access_token = (value || '').split(' ')[1]
+            return await verifyAccessToken(access_token, req as Request)
+          }
+        }
+      }
+    },
+    ['headers']
+  )
 )
