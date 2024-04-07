@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  forgotPasswordController,
   loginController,
   logoutController,
   oauthController,
@@ -10,6 +11,7 @@ import {
 } from '~/controllers/auth.controller'
 import {
   accessTokenValidator,
+  forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
@@ -32,4 +34,7 @@ commonAuthRouter.post('/oauth/google', wrapRequestHandler(oauthController))
 commonAuthRouter.post('/verify-email', verifyEmailTokenValidator, wrapRequestHandler(verifyEmailController))
 
 commonAuthRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+
+commonAuthRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
+
 export default commonAuthRouter

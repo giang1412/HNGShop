@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { USERS_MESSAGES } from '~/constants/messages'
 import {
+  ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
   RefreshTokenReqBody,
@@ -77,5 +78,19 @@ export const verifyEmailController = async (req: Request<ParamsDictionary, any, 
 export const resendVerifyEmailController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
   const result = await authService.resendEmailVerify(user_id)
+  return res.json(result)
+}
+
+export const forgotPasswordController = async (
+  req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
+  res: Response
+) => {
+  const { _id, verify, email } = req.user as User
+
+  const result = await authService.forgotPassword({
+    user_id: (_id as ObjectId).toString(),
+    verify: verify as UserVerifyStatus,
+    email
+  })
   return res.json(result)
 }

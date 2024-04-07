@@ -11,6 +11,7 @@ import { Request } from 'express'
 import { capitalize } from 'lodash'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { verifyAccessToken } from '~/utils/common'
+import User from '~/models/schemas/User.schema'
 
 const nameSchema: ParamSchema = {
   notEmpty: {
@@ -229,6 +230,32 @@ export const verifyEmailTokenValidator = validate(
               })
             }
 
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
+
+export const forgotPasswordValidator = validate(
+  checkSchema(
+    {
+      email: {
+        isEmail: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID
+        },
+        trim: true,
+        custom: {
+          options: async (value, { req }) => {
+            const user = await databaseService.users.findOne({
+              email: value
+            })
+            if (user === null) {
+              throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
+            }
+            req.user = user
             return true
           }
         }
