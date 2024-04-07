@@ -2,14 +2,17 @@ import { Router } from 'express'
 import {
   loginController,
   logoutController,
+  oauthController,
   refreshTokenController,
-  registerController
+  registerController,
+  verifyEmailController
 } from '~/controllers/auth.controller'
 import {
   accessTokenValidator,
   loginValidator,
   refreshTokenValidator,
-  registerValidator
+  registerValidator,
+  verifyEmailTokenValidator
 } from '~/middlewares/auth.middlewares'
 import { wrapRequestHandler } from '~/utils/handler'
 
@@ -22,4 +25,8 @@ commonAuthRouter.post('/login', loginValidator, wrapRequestHandler(loginControll
 commonAuthRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 commonAuthRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
+
+commonAuthRouter.post('/oauth/google', wrapRequestHandler(oauthController))
+
+commonAuthRouter.post('/verify-email', verifyEmailTokenValidator, wrapRequestHandler(verifyEmailController))
 export default commonAuthRouter
