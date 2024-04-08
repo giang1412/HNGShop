@@ -1,4 +1,5 @@
 import commonAuthRouter from './common-auth.routes'
+import commonUserRouter from './common-user.routes'
 
 const commonRoutes = {
   prefix: '/',
@@ -6,6 +7,10 @@ const commonRoutes = {
     {
       path: '',
       route: commonAuthRouter
+    },
+    {
+      path: '',
+      route: commonUserRouter
     }
   ]
 }

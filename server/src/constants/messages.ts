@@ -35,5 +35,22 @@ export const USERS_MESSAGES = {
   VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success',
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
-  RESET_PASSWORD_SUCCESS: 'Reset password success'
+  RESET_PASSWORD_SUCCESS: 'Reset password success',
+  GET_USER_SUCCESS: 'Get my profile success',
+  USER_NOT_VERIFIED: 'User not verified',
+  BIO_MUST_BE_STRING: 'Bio must be a string',
+  BIO_LENGTH: 'Bio length must be from 1 to 200',
+  LOCATION_MUST_BE_STRING: 'Location must be a string',
+  LOCATION_LENGTH: 'Location length must be from 1 to 200',
+  WEBSITE_MUST_BE_STRING: 'Website must be a string',
+  WEBSITE_LENGTH: 'Website length must be from 1 to 200',
+  USERNAME_MUST_BE_STRING: 'Username must be a string',
+  USERNAME_INVALID:
+    'Username must be 4-15 characters long and contain only letters, numbers, underscores, not only numbers',
+  IMAGE_URL_MUST_BE_STRING: 'Avatar must be a string',
+  IMAGE_URL_LENGTH: 'Avatar length must be from 1 to 200',
+  UPDATE_ME_SUCCESS: 'Update my profile success',
+  GET_PROFILE_SUCCESS: 'Get profile success',
+  PHONE_NUMBER_INVALID: 'Phone number invalid',
+  PHONE_NUMBER_EXISTED: 'Phone number is existed'
 }
