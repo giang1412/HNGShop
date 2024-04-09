@@ -3,7 +3,6 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { ChangePasswordReqBody, TokenPayload, UpdateMeReqBody } from '~/models/requests/User.requests'
 import userService from '~/services/user.services'
-import { changePasswordValidator } from './../middlewares/user.middlewares'
 
 export const getMeController = async (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.decoded_authorization as TokenPayload
@@ -40,5 +39,10 @@ export const changePasswordController = async (
 }
 
 export const getUsersController = async (req: Request, res: Response, next: NextFunction) => {
-  return res.json('Ok')
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const result = await userService.getUsers(user_id)
+  return res.json({
+    message: USERS_MESSAGES.GET_USERS_SUCCESS,
+    result
+  })
 }

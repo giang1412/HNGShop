@@ -61,6 +61,16 @@ class UserService {
       message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS
     }
   }
+
+  async getUsers(user_id: string) {
+    const users = await databaseService.users
+      .find(
+        { _id: { $ne: new ObjectId(user_id) } },
+        { projection: { password: 0, email_verify_token: 0, forgot_password_token: 0 } }
+      )
+      .toArray()
+    return users
+  }
 }
 
 const userService = new UserService()

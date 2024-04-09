@@ -55,5 +55,6 @@ export const USERS_MESSAGES = {
   PHONE_NUMBER_EXISTED: 'Phone number is existed',
   OLD_PASSWORD_NOT_MATCH: 'Old password not match',
   CHANGE_PASSWORD_SUCCESS: 'Change password success',
-  ACCOUNT_NOT_ADMIN: 'Account not authorized as admin.'
+  ACCOUNT_NOT_ADMIN: 'Account not authorized as admin.',
+  GET_USERS_SUCCESS: 'Get users success'
 }
