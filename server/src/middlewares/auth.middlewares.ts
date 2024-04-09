@@ -7,11 +7,13 @@ import { validate } from '~/utils/validations'
 import { ErrorWithStatus } from './error.middlewares'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { verifyToken } from '~/utils/jwt'
-import { Request } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { capitalize } from 'lodash'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { verifyAccessToken } from '~/utils/common'
 import { ObjectId } from 'mongodb'
+import { TokenPayload } from '~/models/requests/User.requests'
+import { ROLE } from '~/constants/enums'
 
 export const nameSchema: ParamSchema = {
   notEmpty: {
@@ -328,3 +330,17 @@ export const resetPasswordValidator = validate(
     ['body']
   )
 )
+
+export const verifiedAdminValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const { roles } = req.decoded_authorization as TokenPayload
+  const role = roles.join()
+  if (role !== ROLE.ADMIN) {
+    return next(
+      new ErrorWithStatus({
+        message: USERS_MESSAGES.ACCOUNT_NOT_ADMIN,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    )
+  }
+  next()
+}

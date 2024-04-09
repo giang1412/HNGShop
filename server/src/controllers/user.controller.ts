@@ -38,3 +38,7 @@ export const changePasswordController = async (
   const result = await userService.changePassword(user_id, password)
   return res.json(result)
 }
+
+export const getUsersController = async (req: Request, res: Response, next: NextFunction) => {
+  return res.json('Ok')
+}
