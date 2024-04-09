@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
 import { UpdateMeReqBody } from '~/models/requests/User.requests'
+import { hashPassword } from '~/utils/crypto'
+import { USERS_MESSAGES } from '~/constants/messages'
 
 class UserService {
   async getMe(user_id: string) {
@@ -39,6 +41,25 @@ class UserService {
       }
     )
     return user
+  }
+
+  async changePassword(user_id: string, new_password: string) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          password: hashPassword(new_password)
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS
+    }
   }
 }
 

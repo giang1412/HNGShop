@@ -52,5 +52,7 @@ export const USERS_MESSAGES = {
   UPDATE_ME_SUCCESS: 'Update my profile success',
   GET_PROFILE_SUCCESS: 'Get profile success',
   PHONE_NUMBER_INVALID: 'Phone number invalid',
-  PHONE_NUMBER_EXISTED: 'Phone number is existed'
+  PHONE_NUMBER_EXISTED: 'Phone number is existed',
+  OLD_PASSWORD_NOT_MATCH: 'Old password not match',
+  CHANGE_PASSWORD_SUCCESS: 'Change password success'
 }

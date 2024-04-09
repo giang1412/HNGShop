@@ -8,6 +8,9 @@ import { validate } from '~/utils/validations'
 import { ParamSchema, checkSchema } from 'express-validator'
 import { REGEX_PHONE_NUMBER } from '~/constants/regex'
 import databaseService from '~/services/database.services'
+import { hashPassword } from '~/utils/crypto'
+import { ObjectId } from 'mongodb'
+import { confirmPasswordSchema, passwordSchema } from './auth.middlewares'
 
 const nameSchema: ParamSchema = {
   notEmpty: {
@@ -110,4 +113,36 @@ export const updateMeValidator = validate(
     },
     ['body']
   )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema({
+    old_password: {
+      custom: {
+        options: async (value, { req }) => {
+          const { user_id } = (req as Request).decoded_authorization as TokenPayload
+          const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+
+          if (!user) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.USER_NOT_FOUND,
+              status: HTTP_STATUS.NOT_FOUND
+            })
+          }
+
+          const { password } = user
+          const isMatch = hashPassword(value) === password
+
+          if (!isMatch) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+        }
+      }
+    },
+    password: passwordSchema,
+    confirm_password: confirmPasswordSchema
+  })
 )

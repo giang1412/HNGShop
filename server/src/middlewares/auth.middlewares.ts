@@ -11,10 +11,9 @@ import { Request } from 'express'
 import { capitalize } from 'lodash'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { verifyAccessToken } from '~/utils/common'
-import User from '~/models/schemas/User.schema'
 import { ObjectId } from 'mongodb'
 
-const nameSchema: ParamSchema = {
+export const nameSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
   },
@@ -31,7 +30,7 @@ const nameSchema: ParamSchema = {
     errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
   }
 }
-const passwordSchema: ParamSchema = {
+export const passwordSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED
   },
@@ -57,7 +56,7 @@ const passwordSchema: ParamSchema = {
   }
 }
 
-const confirmPasswordSchema: ParamSchema = {
+export const confirmPasswordSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED
   },
@@ -91,7 +90,7 @@ const confirmPasswordSchema: ParamSchema = {
   }
 }
 
-const forgotPasswordTokenSchema: ParamSchema = {
+export const forgotPasswordTokenSchema: ParamSchema = {
   trim: true,
   custom: {
     options: async (value: string, { req }) => {
