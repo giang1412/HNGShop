@@ -56,5 +56,6 @@ export const USERS_MESSAGES = {
   OLD_PASSWORD_NOT_MATCH: 'Old password not match',
   CHANGE_PASSWORD_SUCCESS: 'Change password success',
   ACCOUNT_NOT_ADMIN: 'Account not authorized as admin.',
-  GET_USERS_SUCCESS: 'Get users success'
+  GET_USERS_SUCCESS: 'Get users success',
+  ADD_USER_SUCCESS: 'Add user success'
 }

@@ -10,7 +10,7 @@ import { REGEX_PHONE_NUMBER } from '~/constants/regex'
 import databaseService from '~/services/database.services'
 import { hashPassword } from '~/utils/crypto'
 import { ObjectId } from 'mongodb'
-import { confirmPasswordSchema, passwordSchema } from './auth.middlewares'
+import { confirmPasswordSchema, emailSchema, passwordSchema } from './auth.middlewares'
 
 const nameSchema: ParamSchema = {
   notEmpty: {
@@ -144,5 +144,14 @@ export const changePasswordValidator = validate(
     },
     password: passwordSchema,
     confirm_password: confirmPasswordSchema
+  })
+)
+
+export const addUserValidator = validate(
+  checkSchema({
+    email: emailSchema,
+    password: passwordSchema,
+    confirm_password: confirmPasswordSchema,
+    name: nameSchema
   })
 )

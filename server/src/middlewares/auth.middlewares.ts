@@ -15,6 +15,21 @@ import { ObjectId } from 'mongodb'
 import { TokenPayload } from '~/models/requests/User.requests'
 import { ROLE } from '~/constants/enums'
 
+export const emailSchema: ParamSchema = {
+  isEmail: {
+    errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID
+  },
+  trim: true,
+  custom: {
+    options: async (value: string) => {
+      const isExistEmail = await authService.checkEmailExist(value)
+      if (isExistEmail) {
+        throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS)
+      }
+      return true
+    }
+  }
+}
 export const nameSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
@@ -71,16 +86,6 @@ export const confirmPasswordSchema: ParamSchema = {
       max: 50
     },
     errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
-  },
-  isStrongPassword: {
-    options: {
-      minLength: 6,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 1
-    },
-    errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_STRONG
   },
   custom: {
     options: (value, { req }) => {
@@ -140,21 +145,7 @@ export const registerValidator = validate(
   checkSchema(
     {
       name: nameSchema,
-      email: {
-        isEmail: {
-          errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID
-        },
-        trim: true,
-        custom: {
-          options: async (value: string) => {
-            const isExistEmail = await authService.checkEmailExist(value)
-            if (isExistEmail) {
-              throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS)
-            }
-            return true
-          }
-        }
-      },
+      email: emailSchema,
       password: passwordSchema,
       confirm_password: confirmPasswordSchema
     },

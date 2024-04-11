@@ -63,3 +63,15 @@ export interface ChangePasswordReqBody {
   password: string
   confirm_password: string
 }
+
+export interface AddUserReqBody {
+  name: string
+  email: string
+  password: string
+  confirm_password: string
+  date_of_birth?: string
+  address?: string
+  phone: string
+  roles: string[]
+  avatar: string
+}

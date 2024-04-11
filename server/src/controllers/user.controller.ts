@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { ChangePasswordReqBody, TokenPayload, UpdateMeReqBody } from '~/models/requests/User.requests'
+import { AddUserReqBody, ChangePasswordReqBody, TokenPayload, UpdateMeReqBody } from '~/models/requests/User.requests'
 import userService from '~/services/user.services'
 
 export const getMeController = async (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +43,18 @@ export const getUsersController = async (req: Request, res: Response, next: Next
   const result = await userService.getUsers(user_id)
   return res.json({
     message: USERS_MESSAGES.GET_USERS_SUCCESS,
+    result
+  })
+}
+
+export const addUserController = async (
+  req: Request<ParamsDictionary, any, AddUserReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await userService.addUser(req.body)
+  return res.json({
+    message: USERS_MESSAGES.ADD_USER_SUCCESS,
     result
   })
 }

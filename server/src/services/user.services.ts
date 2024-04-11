@@ -1,10 +1,35 @@
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
-import { UpdateMeReqBody } from '~/models/requests/User.requests'
+import { AddUserReqBody, UpdateMeReqBody } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
 import { USERS_MESSAGES } from '~/constants/messages'
+import User from '~/models/schemas/User.schema'
+import { ROLE, TokenType, UserVerifyStatus } from '~/constants/enums'
+import { signToken } from '~/utils/jwt'
 
 class UserService {
+  private signEmailVerifyToken({
+    user_id,
+    verify,
+    roles
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    roles: string[]
+  }) {
+    return signToken({
+      payload: {
+        user_id,
+        roles,
+        token_type: TokenType.EmailVerifyToken,
+        verify
+      },
+      privateKey: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string,
+      options: {
+        expiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRES_IN
+      }
+    })
+  }
   async getMe(user_id: string) {
     const user = await databaseService.users.findOne(
       { _id: new ObjectId(user_id) },
@@ -70,6 +95,39 @@ class UserService {
       )
       .toArray()
     return users
+  }
+
+  async addUser(payload: AddUserReqBody) {
+    const user_id = new ObjectId()
+    const email_verify_token = await this.signEmailVerifyToken({
+      user_id: user_id.toString(),
+      verify: UserVerifyStatus.Unverified,
+      roles: [ROLE.USER]
+    })
+    const date = new Date()
+    const insertedUser = new User({
+      ...payload,
+      _id: user_id,
+      email_verify_token,
+      date_of_birth: date,
+      password: hashPassword(payload.password),
+      name: payload.name || `user${user_id.toString()}`,
+      roles: [ROLE.USER]
+    })
+    await databaseService.users.insertOne(insertedUser)
+
+    console.log('email_verify_token', email_verify_token)
+    // Trả về user vừa được chèn vào cơ sở dữ liệu
+    const user = await databaseService.users.findOne(
+      { _id: user_id },
+      {
+        projection: {
+          password: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
   }
 }
 
