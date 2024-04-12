@@ -97,3 +97,13 @@ export const updateUserController = async (
     result
   })
 }
+
+export const deleteUserController = async (
+  req: Request<ParamsDictionary, any, UpdateUserReqBody, UserIDReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.params
+  const result = await userService.deleteUser(user_id)
+  return res.json(result)
+}

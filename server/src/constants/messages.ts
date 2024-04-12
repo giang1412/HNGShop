@@ -60,5 +60,6 @@ export const USERS_MESSAGES = {
   ADD_USER_SUCCESS: 'Add user success',
   UPDATE_USER_SUCCESS: 'Update user success',
   GET_USER_SUCCESS: 'Get user success',
-  INVALID_USER_ID: 'User_id is invalid'
+  INVALID_USER_ID: 'User_id is invalid',
+  DELETE_USER_SUCCESS: 'Delete user success'
 }
