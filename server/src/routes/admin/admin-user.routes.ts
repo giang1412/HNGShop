@@ -1,8 +1,13 @@
 import { Router } from 'express'
-import { addUserController, getUsersController, updateUserController } from '~/controllers/user.controller'
+import {
+  addUserController,
+  getUserController,
+  getUsersController,
+  updateUserController
+} from '~/controllers/user.controller'
 import { accessTokenValidator, verifiedAdminValidator } from '~/middlewares/auth.middlewares'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
-import { addUserValidator, updateUserValidator } from '~/middlewares/user.middlewares'
+import { addUserValidator, getUserValidator, updateUserValidator } from '~/middlewares/user.middlewares'
 import { UpdateUserReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handler'
 
@@ -32,5 +37,13 @@ adminUserRouter.patch(
     'confirm_password'
   ]),
   wrapRequestHandler(updateUserController)
+)
+
+adminUserRouter.get(
+  '/:user_id',
+  accessTokenValidator,
+  verifiedAdminValidator,
+  getUserValidator,
+  wrapRequestHandler(getUserController)
 )
 export default adminUserRouter

@@ -36,7 +36,7 @@ export const USERS_MESSAGES = {
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
   RESET_PASSWORD_SUCCESS: 'Reset password success',
-  GET_USER_SUCCESS: 'Get my profile success',
+  GET_MY_PROFILE_SUCCESS: 'Get my profile success',
   USER_NOT_VERIFIED: 'User not verified',
   BIO_MUST_BE_STRING: 'Bio must be a string',
   BIO_LENGTH: 'Bio length must be from 1 to 200',
@@ -58,5 +58,7 @@ export const USERS_MESSAGES = {
   ACCOUNT_NOT_ADMIN: 'Account not authorized as admin.',
   GET_USERS_SUCCESS: 'Get users success',
   ADD_USER_SUCCESS: 'Add user success',
-  UPDATE_USER_SUCCESS: 'Update user success'
+  UPDATE_USER_SUCCESS: 'Update user success',
+  GET_USER_SUCCESS: 'Get user success',
+  INVALID_USER_ID: 'User_id is invalid'
 }

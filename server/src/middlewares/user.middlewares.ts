@@ -12,6 +12,18 @@ import { hashPassword } from '~/utils/crypto'
 import { ObjectId } from 'mongodb'
 import { confirmPasswordSchema, emailSchema, passwordSchema } from './auth.middlewares'
 
+const userIdSchema: ParamSchema = {
+  custom: {
+    options: async (value: string, { req }) => {
+      if (!ObjectId.isValid(value)) {
+        throw new ErrorWithStatus({
+          message: USERS_MESSAGES.INVALID_USER_ID,
+          status: HTTP_STATUS.NOT_FOUND
+        })
+      }
+    }
+  }
+}
 const nameSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
@@ -203,5 +215,14 @@ export const updateUserValidator = validate(
       }
     },
     ['body']
+  )
+)
+
+export const getUserValidator = validate(
+  checkSchema(
+    {
+      user_id: userIdSchema
+    },
+    ['params']
   )
 )

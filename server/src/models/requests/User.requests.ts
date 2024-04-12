@@ -86,6 +86,6 @@ export interface UpdateUserReqBody {
   confirm_password?: string
 }
 
-export interface UpdateUserReqParams {
+export interface UserIDReqParams {
   user_id: string
 }

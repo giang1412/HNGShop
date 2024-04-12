@@ -6,6 +6,8 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import User from '~/models/schemas/User.schema'
 import { ROLE, TokenType, UserVerifyStatus } from '~/constants/enums'
 import { signToken } from '~/utils/jwt'
+import { ErrorWithStatus } from '~/middlewares/error.middlewares'
+import HTTP_STATUS from '~/constants/httpStatus'
 
 class UserService {
   private signEmailVerifyToken({
@@ -95,6 +97,13 @@ class UserService {
       )
       .toArray()
     return users
+  }
+
+  async getUser(user_id: string) {
+    const user = await databaseService.users
+      .find({ _id: new ObjectId(user_id) }, { projection: { password: 0 } })
+      .toArray()
+    return user
   }
 
   async addUser(payload: AddUserReqBody) {

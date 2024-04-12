@@ -7,7 +7,7 @@ import {
   TokenPayload,
   UpdateMeReqBody,
   UpdateUserReqBody,
-  UpdateUserReqParams
+  UserIDReqParams
 } from '~/models/requests/User.requests'
 import userService from '~/services/user.services'
 
@@ -15,7 +15,7 @@ export const getMeController = async (req: Request, res: Response, next: NextFun
   const { user_id } = req.decoded_authorization as TokenPayload
   const result = await userService.getMe(user_id)
   return res.json({
-    message: USERS_MESSAGES.GET_USER_SUCCESS,
+    message: USERS_MESSAGES.GET_MY_PROFILE_SUCCESS,
     result
   })
 }
@@ -54,6 +54,24 @@ export const getUsersController = async (req: Request, res: Response, next: Next
   })
 }
 
+export const getUserController = async (
+  req: Request<ParamsDictionary, any, UpdateUserReqBody, UserIDReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.params
+  const result = await userService.getUser(user_id)
+  if (result.length == 0) {
+    return res.json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  return res.json({
+    message: USERS_MESSAGES.GET_USER_SUCCESS,
+    result
+  })
+}
+
 export const addUserController = async (
   req: Request<ParamsDictionary, any, AddUserReqBody>,
   res: Response,
@@ -67,7 +85,7 @@ export const addUserController = async (
 }
 
 export const updateUserController = async (
-  req: Request<ParamsDictionary, any, UpdateUserReqBody, UpdateUserReqParams>,
+  req: Request<ParamsDictionary, any, UpdateUserReqBody, UserIDReqParams>,
   res: Response,
   next: NextFunction
 ) => {
