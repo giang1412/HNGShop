@@ -1,7 +1,14 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { AddUserReqBody, ChangePasswordReqBody, TokenPayload, UpdateMeReqBody } from '~/models/requests/User.requests'
+import {
+  AddUserReqBody,
+  ChangePasswordReqBody,
+  TokenPayload,
+  UpdateMeReqBody,
+  UpdateUserReqBody,
+  UpdateUserReqParams
+} from '~/models/requests/User.requests'
 import userService from '~/services/user.services'
 
 export const getMeController = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +62,20 @@ export const addUserController = async (
   const result = await userService.addUser(req.body)
   return res.json({
     message: USERS_MESSAGES.ADD_USER_SUCCESS,
+    result
+  })
+}
+
+export const updateUserController = async (
+  req: Request<ParamsDictionary, any, UpdateUserReqBody, UpdateUserReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  const payload = req.body
+  const { user_id } = req.params
+  const result = await userService.updateUser(user_id, payload)
+  return res.json({
+    message: USERS_MESSAGES.UPDATE_USER_SUCCESS,
     result
   })
 }

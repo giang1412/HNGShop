@@ -1,7 +1,9 @@
 import { Router } from 'express'
-import { addUserController, getUsersController } from '~/controllers/user.controller'
+import { addUserController, getUsersController, updateUserController } from '~/controllers/user.controller'
 import { accessTokenValidator, verifiedAdminValidator } from '~/middlewares/auth.middlewares'
-import { addUserValidator } from '~/middlewares/user.middlewares'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { addUserValidator, updateUserValidator } from '~/middlewares/user.middlewares'
+import { UpdateUserReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handler'
 
 const adminUserRouter = Router()
@@ -13,5 +15,22 @@ adminUserRouter.post(
   verifiedAdminValidator,
   addUserValidator,
   wrapRequestHandler(addUserController)
+)
+
+adminUserRouter.patch(
+  '/:user_id',
+  accessTokenValidator,
+  verifiedAdminValidator,
+  updateUserValidator,
+  filterMiddleware<UpdateUserReqBody>([
+    'name',
+    'date_of_birth',
+    'phone',
+    'avatar',
+    'address',
+    'password',
+    'confirm_password'
+  ]),
+  wrapRequestHandler(updateUserController)
 )
 export default adminUserRouter

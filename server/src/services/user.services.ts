@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
-import { AddUserReqBody, UpdateMeReqBody } from '~/models/requests/User.requests'
+import { AddUserReqBody, UpdateMeReqBody, UpdateUserReqBody } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
 import { USERS_MESSAGES } from '~/constants/messages'
 import User from '~/models/schemas/User.schema'
@@ -123,6 +123,31 @@ class UserService {
       {
         projection: {
           password: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
+  }
+
+  async updateUser(user_id: string, payload: UpdateUserReqBody) {
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    const user = await databaseService.users.findOneAndUpdate(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          ...(_payload as UpdateUserReqBody & { date_of_birth?: Date }),
+          password: hashPassword(_payload.password as string)
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after',
+        projection: {
+          password: 0,
+          email_verify_token: 0,
           forgot_password_token: 0
         }
       }

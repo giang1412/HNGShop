@@ -75,3 +75,17 @@ export interface AddUserReqBody {
   roles: string[]
   avatar: string
 }
+
+export interface UpdateUserReqBody {
+  name?: string
+  date_of_birth?: string
+  address?: string
+  phone?: string
+  avatar?: string
+  password?: string
+  confirm_password?: string
+}
+
+export interface UpdateUserReqParams {
+  user_id: string
+}

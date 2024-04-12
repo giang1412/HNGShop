@@ -155,3 +155,53 @@ export const addUserValidator = validate(
     name: nameSchema
   })
 )
+
+export const updateUserValidator = validate(
+  checkSchema(
+    {
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema,
+      name: {
+        ...nameSchema,
+        optional: true,
+        notEmpty: undefined
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      address: {
+        optional: true,
+        isString: {
+          errorMessage: USERS_MESSAGES.LOCATION_MUST_BE_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 200
+          },
+          errorMessage: USERS_MESSAGES.LOCATION_LENGTH
+        }
+      },
+      avatar: imageSchema,
+      phone: {
+        optional: true,
+        trim: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            if (!REGEX_PHONE_NUMBER.test(value)) {
+              throw new Error(USERS_MESSAGES.PHONE_NUMBER_INVALID)
+            }
+            const user = await databaseService.users.findOne({ phone: value })
+            if (user) {
+              throw Error(USERS_MESSAGES.PHONE_NUMBER_EXISTED)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
