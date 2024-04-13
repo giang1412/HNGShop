@@ -1,5 +1,10 @@
 import { Router } from 'express'
-import { changePasswordController, getMeController, updateMeController } from '~/controllers/user.controller'
+import {
+  changePasswordController,
+  getMeController,
+  updateMeController,
+  uploadAvatarController
+} from '~/controllers/user.controller'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import { changePasswordValidator, updateMeValidator, verifiedUserValidator } from '~/middlewares/user.middlewares'
@@ -25,5 +30,12 @@ commonUserRouter.put(
   verifiedUserValidator,
   changePasswordValidator,
   wrapRequestHandler(changePasswordController)
+)
+
+commonUserRouter.post(
+  '/upload-avatar',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(uploadAvatarController)
 )
 export default commonUserRouter

@@ -6,9 +6,14 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import User from '~/models/schemas/User.schema'
 import { ROLE, TokenType, UserVerifyStatus } from '~/constants/enums'
 import { signToken } from '~/utils/jwt'
-import { ErrorWithStatus } from '~/middlewares/error.middlewares'
-import HTTP_STATUS from '~/constants/httpStatus'
-
+import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
+import sharp from 'sharp'
+import path from 'path'
+import { getNameFromFullname, handleUploadImage } from '~/utils/file'
+import { Request } from 'express'
+import { uploadFileToS3 } from '~/utils/s3'
+import fsPromise from 'fs/promises'
+import { UPLOAD_IMAGE_AVATAR_DIR } from '~/constants/dir'
 class UserService {
   private signEmailVerifyToken({
     user_id,
@@ -169,6 +174,53 @@ class UserService {
     return {
       message: USERS_MESSAGES.DELETE_USER_SUCCESS
     }
+  }
+
+  async uploadImage(req: Request) {
+    const files = await handleUploadImage(req)
+    const result = await Promise.all(
+      files.map(async (file) => {
+        const newName = getNameFromFullname(file.newFilename)
+        const newFullFilename = `${newName}.jpg`
+        const newPath = path.resolve(UPLOAD_IMAGE_AVATAR_DIR, newFullFilename)
+        sharp.cache(false)
+        await sharp(file.filepath).jpeg().toFile(newPath)
+        const mime = (await import('mime')).default
+        const s3Result = await uploadFileToS3({
+          filename: 'images/' + newFullFilename,
+          filepath: newPath,
+          contentType: mime.getType(newPath) as string
+        })
+        await Promise.all([fsPromise.unlink(file.filepath), fsPromise.unlink(newPath)])
+        return {
+          url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string
+        }
+      })
+    )
+    return result
+  }
+  async uploadAvatar(user_id: string, url: string) {
+    const user = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          avatar: url
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        projection: {
+          avatar: 1
+        },
+        returnDocument: 'after'
+      }
+    )
+
+    return user
   }
 }
 
