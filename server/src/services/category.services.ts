@@ -40,6 +40,10 @@ class CategoryService {
     )
     return category
   }
+  async deleteCategory(category_id: string) {
+    const result = await databaseService.categories.findOneAndDelete({ _id: new ObjectId(category_id) })
+    return result
+  }
 }
 
 const categoryService = new CategoryService()

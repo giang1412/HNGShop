@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   addCategoryController,
+  deleteCategoryController,
   getCategoriesController,
   getCategoryController,
   updateCategoryController
@@ -37,4 +38,11 @@ adminCategoryRouter.put(
   wrapRequestHandler(updateCategoryController)
 )
 
+adminCategoryRouter.delete(
+  '/:category_id',
+  accessTokenValidator,
+  verifiedAdminValidator,
+  categoryIdValidator,
+  wrapRequestHandler(deleteCategoryController)
+)
 export default adminCategoryRouter
