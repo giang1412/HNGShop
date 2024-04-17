@@ -63,3 +63,11 @@ export const USERS_MESSAGES = {
   INVALID_USER_ID: 'User_id is invalid',
   DELETE_USER_SUCCESS: 'Delete user success'
 }
+
+export const CATEGORY_MESSAGES = {
+  NAME_IS_REQUIRED: 'Name is required',
+  CATEGORY_IS_EXIST: 'Category is exist',
+  ADD_CATEGORY_SUCCESS: 'Add category success',
+  NAME_MUST_BE_A_STRING: 'Name must be a string',
+  NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name length must be from 1 to 100'
+}

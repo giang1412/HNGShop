@@ -1,3 +1,4 @@
+import adminCategoryRouter from './admin-category.routes'
 import adminUserRouter from './admin-user.routes'
 
 const adminRoutes = {
@@ -6,6 +7,10 @@ const adminRoutes = {
     {
       path: 'users',
       route: adminUserRouter
+    },
+    {
+      path: 'categories',
+      route: adminCategoryRouter
     }
   ]
 }
