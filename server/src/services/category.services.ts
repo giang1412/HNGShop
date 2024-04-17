@@ -13,6 +13,10 @@ class CategoryService {
     const cate = await databaseService.categories.findOne({ _id: result.insertedId })
     return cate
   }
+  async getCategories() {
+    const categories = await databaseService.categories.find({}).toArray()
+    return categories
+  }
 }
 
 const categoryService = new CategoryService()

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { addCategoryController } from '~/controllers/category.controller'
+import { addCategoryController, getCategoriesController } from '~/controllers/category.controller'
 import { accessTokenValidator, verifiedAdminValidator } from '~/middlewares/auth.middlewares'
 import { addCategoryValidator } from '~/middlewares/category.middlewares'
 import { verifyAccessToken } from '~/utils/common'
@@ -14,5 +14,7 @@ adminCategoryRouter.post(
   addCategoryValidator,
   wrapRequestHandler(addCategoryController)
 )
+
+adminCategoryRouter.get('/', accessTokenValidator, verifiedAdminValidator, wrapRequestHandler(getCategoriesController))
 
 export default adminCategoryRouter

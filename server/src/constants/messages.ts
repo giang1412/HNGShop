@@ -69,5 +69,6 @@ export const CATEGORY_MESSAGES = {
   CATEGORY_IS_EXIST: 'Category is exist',
   ADD_CATEGORY_SUCCESS: 'Add category success',
   NAME_MUST_BE_A_STRING: 'Name must be a string',
-  NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name length must be from 1 to 100'
+  NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name length must be from 1 to 100',
+  GET_CATEGORIES_SUCCESS: 'Get categories success'
 }

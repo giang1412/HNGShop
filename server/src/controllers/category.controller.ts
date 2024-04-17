@@ -16,3 +16,11 @@ export const addCategoryController = async (
     result: result
   })
 }
+
+export const getCategoriesController = async (req: Request, res: Response, next: NextFunction) => {
+  const result = await categoryService.getCategories()
+  return res.json({
+    message: CATEGORY_MESSAGES.GET_CATEGORIES_SUCCESS,
+    result: result
+  })
+}
