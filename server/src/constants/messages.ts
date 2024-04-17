@@ -73,5 +73,6 @@ export const CATEGORY_MESSAGES = {
   GET_CATEGORIES_SUCCESS: 'Get categories success',
   GET_CATEGORY_SUCCESS: 'Get category success',
   INVALID_CATEGORY_ID: 'Invalid category id',
-  CATEGORY_NOT_FOUND: 'Category not found'
+  CATEGORY_NOT_FOUND: 'Category not found',
+  UPDATE_CATEGORY_SUCCESS: 'Update category success'
 }

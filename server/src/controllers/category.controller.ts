@@ -29,11 +29,29 @@ export const getCategoriesController = async (
   })
 }
 
-export const getCategoryController = async (req: Request, res: Response, next: NextFunction) => {
+export const getCategoryController = async (
+  req: Request<ParamsDictionary, any, any, CategoryIDReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
   const { category_id } = req.params
   const result = await categoryService.getCategory(category_id)
   return res.json({
     message: CATEGORY_MESSAGES.GET_CATEGORIES_SUCCESS,
+    result: result
+  })
+}
+
+export const updateCategoryController = async (
+  req: Request<ParamsDictionary, any, CategoryNameReqBody, CategoryIDReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { category_id } = req.params
+  const { name } = req.body
+  const result = await categoryService.updateCategory(category_id, name)
+  return res.json({
+    message: CATEGORY_MESSAGES.UPDATE_CATEGORY_SUCCESS,
     result: result
   })
 }

@@ -6,7 +6,7 @@ import { validate } from '~/utils/validations'
 import { ErrorWithStatus } from './error.middlewares'
 import HTTP_STATUS from '~/constants/httpStatus'
 
-export const addCategoryValidator = validate(
+export const categoryNameValidator = validate(
   checkSchema(
     {
       name: {
@@ -39,7 +39,7 @@ export const addCategoryValidator = validate(
   )
 )
 
-export const getCategoryValidator = validate(
+export const categoryIdValidator = validate(
   checkSchema(
     {
       category_id: {

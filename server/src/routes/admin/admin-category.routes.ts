@@ -2,11 +2,11 @@ import { Router } from 'express'
 import {
   addCategoryController,
   getCategoriesController,
-  getCategoryController
+  getCategoryController,
+  updateCategoryController
 } from '~/controllers/category.controller'
 import { accessTokenValidator, verifiedAdminValidator } from '~/middlewares/auth.middlewares'
-import { addCategoryValidator, getCategoryValidator } from '~/middlewares/category.middlewares'
-import { verifyAccessToken } from '~/utils/common'
+import { categoryIdValidator, categoryNameValidator } from '~/middlewares/category.middlewares'
 import { wrapRequestHandler } from '~/utils/handler'
 
 const adminCategoryRouter = Router()
@@ -15,7 +15,7 @@ adminCategoryRouter.post(
   '/',
   accessTokenValidator,
   verifiedAdminValidator,
-  addCategoryValidator,
+  categoryNameValidator,
   wrapRequestHandler(addCategoryController)
 )
 
@@ -24,8 +24,17 @@ adminCategoryRouter.get(
   '/:category_id',
   accessTokenValidator,
   verifiedAdminValidator,
-  getCategoryValidator,
+  categoryIdValidator,
   wrapRequestHandler(getCategoryController)
+)
+
+adminCategoryRouter.put(
+  '/:category_id',
+  accessTokenValidator,
+  verifiedAdminValidator,
+  categoryNameValidator,
+  categoryIdValidator,
+  wrapRequestHandler(updateCategoryController)
 )
 
 export default adminCategoryRouter
