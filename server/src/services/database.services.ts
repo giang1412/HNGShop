@@ -3,6 +3,7 @@ import { config } from 'dotenv'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Category from '~/models/schemas/Category.schema'
+import Product from '~/models/schemas/Product.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@hngshop-dev.4sjivar.mongodb.net/`
 
@@ -35,6 +36,10 @@ class DatabaseService {
 
   get categories(): Collection<Category> {
     return this.db.collection(process.env.DB_COLLECTION_CATEGORIES as string)
+  }
+
+  get products(): Collection<Product> {
+    return this.db.collection(process.env.DB_COLLECTION_PRODUCTS as string)
   }
 }
 
