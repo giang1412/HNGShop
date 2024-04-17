@@ -70,5 +70,8 @@ export const CATEGORY_MESSAGES = {
   ADD_CATEGORY_SUCCESS: 'Add category success',
   NAME_MUST_BE_A_STRING: 'Name must be a string',
   NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name length must be from 1 to 100',
-  GET_CATEGORIES_SUCCESS: 'Get categories success'
+  GET_CATEGORIES_SUCCESS: 'Get categories success',
+  GET_CATEGORY_SUCCESS: 'Get category success',
+  INVALID_CATEGORY_ID: 'Invalid category id',
+  CATEGORY_NOT_FOUND: 'Category not found'
 }

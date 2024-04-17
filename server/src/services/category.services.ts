@@ -1,7 +1,6 @@
 import { ObjectId, WithId } from 'mongodb'
 import databaseService from './database.services'
 import Category from '~/models/schemas/Category.schema'
-import { CategoryNameReqBody } from '~/models/requests/Category.requests'
 
 class CategoryService {
   async addCategory(name: string) {
@@ -13,9 +12,20 @@ class CategoryService {
     const cate = await databaseService.categories.findOne({ _id: result.insertedId })
     return cate
   }
+
   async getCategories() {
     const categories = await databaseService.categories.find({}).toArray()
     return categories
+  }
+
+  async getCategory(category_id: string) {
+    const category = await databaseService.categories
+      .find({
+        _id: new ObjectId(category_id)
+      })
+      .toArray()
+
+    return category[0]
   }
 }
 

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { CategoryNameReqBody } from '~/models/requests/Category.requests'
+import { CategoryIDReqParams, CategoryNameReqBody } from '~/models/requests/Category.requests'
 import categoryService from '~/services/category.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { CATEGORY_MESSAGES } from '~/constants/messages'
@@ -17,8 +17,21 @@ export const addCategoryController = async (
   })
 }
 
-export const getCategoriesController = async (req: Request, res: Response, next: NextFunction) => {
+export const getCategoriesController = async (
+  req: Request<ParamsDictionary, any, any, CategoryIDReqParams>,
+  res: Response,
+  next: NextFunction
+) => {
   const result = await categoryService.getCategories()
+  return res.json({
+    message: CATEGORY_MESSAGES.GET_CATEGORIES_SUCCESS,
+    result: result
+  })
+}
+
+export const getCategoryController = async (req: Request, res: Response, next: NextFunction) => {
+  const { category_id } = req.params
+  const result = await categoryService.getCategory(category_id)
   return res.json({
     message: CATEGORY_MESSAGES.GET_CATEGORIES_SUCCESS,
     result: result
