@@ -12,11 +12,11 @@ export const initFolder = () => {
     }
   })
 }
-export const handleUploadImage = async (req: Request) => {
+export const handleUploadImage = async (req: Request, maxFile: number) => {
   const formidable = (await import('formidable')).default
   const form = formidable({
     uploadDir: UPLOAD_IMAGE_AVATAR_TEMP_DIR,
-    maxFiles: 1,
+    maxFiles: maxFile,
     keepExtensions: true,
     maxFileSize: 10000 * 1024, // 1000KB
     maxTotalFileSize: 10000 * 1024 * 4,

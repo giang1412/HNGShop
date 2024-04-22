@@ -176,8 +176,8 @@ class UserService {
     }
   }
 
-  async uploadImage(req: Request) {
-    const files = await handleUploadImage(req)
+  async uploadImage(req: Request, maxFile: number) {
+    const files = await handleUploadImage(req, maxFile)
     const result = await Promise.all(
       files.map(async (file) => {
         const newName = getNameFromFullname(file.newFilename)
@@ -199,14 +199,16 @@ class UserService {
     )
     return result
   }
-  async uploadAvatar(user_id: string, url: string) {
+  async uploadAvatar(req: Request, user_id: string) {
+    const maxFile = 1
+    const url = (await this.uploadImage(req, maxFile)) as any
     const user = await databaseService.users.findOneAndUpdate(
       {
         _id: new ObjectId(user_id)
       },
       {
         $set: {
-          avatar: url
+          avatar: url[0].url
         },
         $currentDate: {
           updated_at: true

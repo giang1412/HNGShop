@@ -15,7 +15,6 @@ initFolder()
 const app = express()
 
 const routes = [{ ...adminRoutes }, { ...userRoutes }, { ...commonRoutes }]
-
 app.use(express.json())
 
 routes.forEach((item) => item.routes.forEach((route) => app.use(item.prefix + route.path, route.route)))

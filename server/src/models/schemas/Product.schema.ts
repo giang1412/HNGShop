@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb'
 interface ProductType {
   _id?: ObjectId
   name: string
-  image: string
+  image?: string
   images?: string[]
   description?: string
   category?: ObjectId
@@ -19,7 +19,7 @@ interface ProductType {
 export default class Product {
   _id?: ObjectId
   name: string
-  image: string
+  image?: string
   images?: string[]
   description?: string
   category?: ObjectId

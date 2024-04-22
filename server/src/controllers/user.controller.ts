@@ -109,14 +109,21 @@ export const deleteUserController = async (
 }
 
 export const uploadAvatarController = async (req: Request, res: Response, next: NextFunction) => {
+  // const { user_id } = req.decoded_authorization as TokenPayload
+  // const url = await userService.uploadImage(req)
+  // if (url) {
+  //   const _url = url[0].url
+  //   const user = await userService.uploadAvatar(user_id, _url)
+  //   return res.json({
+  //     message: 'Upload avatar success',
+  //     result: user
+  //   })
+  // }
+
   const { user_id } = req.decoded_authorization as TokenPayload
-  const url = await userService.uploadImage(req)
-  if (url) {
-    const _url = url[0].url
-    const user = await userService.uploadAvatar(user_id, _url)
-    return res.json({
-      message: 'Upload avatar success',
-      result: user
-    })
-  }
+  const result = await userService.uploadAvatar(req, user_id)
+  return res.json({
+    message: 'Upload avatar success',
+    result
+  })
 }

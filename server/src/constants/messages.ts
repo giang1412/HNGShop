@@ -77,3 +77,8 @@ export const CATEGORY_MESSAGES = {
   UPDATE_CATEGORY_SUCCESS: 'Update category success',
   DELETE_CATEGORY_SUCCESS: 'Delete category success'
 }
+
+export const PRODUCT_MESSAGES = {
+  INVALID_PRODUCT_ID: 'Invalid product id',
+  PRODUCT_NOT_FOUND: 'Product not found'
+}
