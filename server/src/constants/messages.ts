@@ -82,3 +82,9 @@ export const PRODUCT_MESSAGES = {
   INVALID_PRODUCT_ID: 'Invalid product id',
   PRODUCT_NOT_FOUND: 'Product not found'
 }
+
+export const IMAGE_MESSAGES = {
+  IMAGE_NOT_FOUND: 'Image not found',
+  ADD_IMAGE_SUCCESS: 'Add image success',
+  REMOVE_IMAGE_SUCCESS: 'Remove image success'
+}

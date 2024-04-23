@@ -5,11 +5,5 @@ import { wrapRequestHandler } from '~/utils/handler'
 
 const adminProductRouter = Router()
 
-adminProductRouter.post(
-  '/',
-  accessTokenValidator,
-  verifiedAdminValidator,
-
-  wrapRequestHandler(addProductController)
-)
+adminProductRouter.post('/', accessTokenValidator, verifiedAdminValidator, wrapRequestHandler(addProductController))
 export default adminProductRouter

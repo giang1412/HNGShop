@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { adminProductImageController } from '~/controllers/media.controller'
+import { createProductImageController, removeProductImageController } from '~/controllers/media.controller'
 import { accessTokenValidator, verifiedAdminValidator } from '~/middlewares/auth.middlewares'
-import { productIdValidator } from '~/middlewares/product.middlewares'
+import { imageUrlValidator, productIdValidator } from '~/middlewares/product.middlewares'
 import { wrapRequestHandler } from '~/utils/handler'
 
 const adminMediaRouter = Router()
@@ -11,6 +11,15 @@ adminMediaRouter.post(
   accessTokenValidator,
   verifiedAdminValidator,
   productIdValidator,
-  wrapRequestHandler(adminProductImageController)
+  wrapRequestHandler(createProductImageController)
+)
+
+adminMediaRouter.delete(
+  '/:product_id',
+  accessTokenValidator,
+  verifiedAdminValidator,
+  productIdValidator,
+  imageUrlValidator,
+  wrapRequestHandler(removeProductImageController)
 )
 export default adminMediaRouter

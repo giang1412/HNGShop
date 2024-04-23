@@ -50,3 +50,18 @@ export const sendFileFromS3 = async (res: Response, filepath: string) => {
     res.status(HTTP_STATUS.NOT_FOUND).send('Not found')
   }
 }
+
+export const deleteImageFromS3 = async (filename: string) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME as string,
+    Key: filename
+  }
+
+  try {
+    await s3.deleteObject(params)
+    console.log(`Image ${filename} deleted from S3 successfully`)
+  } catch (error) {
+    console.error(`Error deleting image ${filename} from S3:`, error)
+    throw new Error(`Error deleting image ${filename} from S3`)
+  }
+}

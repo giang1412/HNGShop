@@ -1,7 +1,8 @@
 import { ProductReqBody } from '~/models/requests/Product.requests'
 import databaseService from './database.services'
 import Product from '~/models/schemas/Product.schema'
-import { ObjectId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
+import { deleteImageFromS3 } from '~/utils/s3'
 
 class ProductService {
   async checkAndCreateCategory(category: string) {
@@ -63,16 +64,46 @@ class ProductService {
         await databaseService.products.findOneAndUpdate({ _id: new ObjectId(product_id) }, { $set: { image: urls[0] } })
       }
 
+      if ((existingProduct.images as string[]).length >= 6) {
+        throw new Error('Exceeded the maximum number of images')
+      }
+
       const product = await databaseService.products.findOneAndUpdate(
         { _id: new ObjectId(product_id) },
-        { $push: { images: { $each: urls, $slice: -6 } } },
+        { $push: { images: { $each: urls } } },
         { returnDocument: 'after' }
       )
 
       return product
     }
   }
-}
 
+  async deleteImageFromProduct({ product_id, image_url }: { product_id: string; image_url: string }) {
+    const product = await databaseService.products.findOne({ _id: new ObjectId(product_id) })
+    if (!product) {
+      throw new Error(' not found')
+    }
+    if (!image_url) {
+      throw new Error('Image not found')
+    }
+
+    const path = image_url.split('hngshop.s3.ap-southeast-1.amazonaws.com/')[1]
+    await deleteImageFromS3(path)
+
+    if (product.image === image_url) {
+      // Xóa ảnh chính và cập nhật trường image và images
+      const images = product.images ? product.images.filter((image) => image !== image_url) : []
+      const newImage = images.length > 0 ? images[0] : ''
+      await databaseService.products.updateOne({ _id: product._id }, { $set: { image: newImage, images } })
+    } else {
+      // Xóa ảnh khỏi trường images
+      const images = product.images ? product.images.filter((image) => image !== image_url) : []
+      await databaseService.products.updateOne({ _id: product._id }, { $set: { images } })
+    }
+
+    const updatedProduct = await databaseService.products.findOne({ _id: new ObjectId(product_id) })
+    return updatedProduct
+  }
+}
 const productService = new ProductService()
 export default productService

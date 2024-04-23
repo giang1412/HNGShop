@@ -8,7 +8,7 @@ import { uploadFileToS3 } from '~/utils/s3'
 import fsPromise from 'fs/promises'
 
 class MediaService {
-  async uploadImage(req: Request, maxFile: number) {
+  async uploadImage(req: Request, maxFile: number, folder: string) {
     const files = await handleUploadImage(req, maxFile)
     const result = await Promise.all(
       files.map(async (file) => {
@@ -19,7 +19,7 @@ class MediaService {
         await sharp(file.filepath).jpeg().toFile(newPath)
         const mime = (await import('mime')).default
         const s3Result = await uploadFileToS3({
-          filename: 'images/' + newFullFilename,
+          filename: 'images/' + folder + newFullFilename,
           filepath: newPath,
           contentType: mime.getType(newPath) as string
         })
