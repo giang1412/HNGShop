@@ -34,7 +34,7 @@ export const productIdValidator = validate(
         }
       }
     },
-    ['params']
+    ['params', 'body']
   )
 )
 

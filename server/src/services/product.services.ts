@@ -104,6 +104,18 @@ class ProductService {
     const updatedProduct = await databaseService.products.findOne({ _id: new ObjectId(product_id) })
     return updatedProduct
   }
+
+  async getProducts() {
+    const products = databaseService.products.find({}).toArray()
+    console.log(products)
+    return products
+  }
+
+  async getProduct(product_id: string) {
+    const products = databaseService.products.find({ _id: new ObjectId(product_id) }).toArray()
+
+    return products
+  }
 }
 const productService = new ProductService()
 export default productService
