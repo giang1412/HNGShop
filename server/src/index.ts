@@ -7,13 +7,13 @@ import { config } from 'dotenv'
 import adminRoutes from './routes/admin/index.routes'
 import '~/utils/s3'
 import { initFolder } from './utils/file'
+
 config()
 databaseService.connect()
 
 const port = process.env.PORT || 3400
 initFolder()
 const app = express()
-
 const routes = [{ ...adminRoutes }, { ...userRoutes }, { ...commonRoutes }]
 app.use(express.json())
 

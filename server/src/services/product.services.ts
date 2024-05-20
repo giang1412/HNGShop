@@ -1,7 +1,7 @@
-import { ProductReqBody } from '~/models/requests/Product.requests'
+import { ProductReqBody, UpdateProductReqBody } from '~/models/requests/Product.requests'
 import databaseService from './database.services'
 import Product from '~/models/schemas/Product.schema'
-import { ObjectId, WithId } from 'mongodb'
+import { ObjectId, UpdateFilter, WithId } from 'mongodb'
 import { deleteImageFromS3 } from '~/utils/s3'
 
 class ProductService {
@@ -106,15 +106,88 @@ class ProductService {
   }
 
   async getProducts() {
-    const products = databaseService.products.find({}).toArray()
-    console.log(products)
+    const products = await databaseService.products
+      .aggregate([
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'category'
+          }
+        },
+        {
+          $unwind: '$category'
+        }
+      ])
+      .toArray()
+
     return products
   }
 
   async getProduct(product_id: string) {
-    const products = databaseService.products.find({ _id: new ObjectId(product_id) }).toArray()
+    const product = await databaseService.products
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(product_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'category'
+          }
+        },
+        {
+          $unwind: '$category'
+        }
+      ])
+      .toArray()
+    return product[0]
+  }
 
-    return products
+  async updateProduct(product_id: string, payload: UpdateProductReqBody) {
+    let categoryId
+    if (payload.category) {
+      categoryId = await this.checkAndCreateCategory(payload.category as string)
+    }
+
+    const updateData: UpdateFilter<Product> = {
+      $set: {
+        ...(payload as UpdateFilter<Product>),
+        ...(categoryId && { category: categoryId })
+      },
+      $currentDate: {
+        updated_at: true
+      }
+    }
+
+    await databaseService.products.findOneAndUpdate({ _id: new ObjectId(product_id) }, updateData, {
+      returnDocument: 'after'
+    })
+
+    const product = await databaseService.products
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(product_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'category'
+          }
+        }
+      ])
+      .toArray()
+
+    return product[0]
   }
 }
 const productService = new ProductService()

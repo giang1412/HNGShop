@@ -80,7 +80,18 @@ export const CATEGORY_MESSAGES = {
 
 export const PRODUCT_MESSAGES = {
   INVALID_PRODUCT_ID: 'Invalid product id',
-  PRODUCT_NOT_FOUND: 'Product not found'
+  PRODUCT_NOT_FOUND: 'Product not found',
+  NAME_PRODUCT_REQUIRED: 'Name is required',
+  NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Name length must be from 1 to 100',
+  DESCRIPTION_MUST_BE_A_STRING: 'Description must be a string',
+  NAME_MUST_BE_A_STRING: 'Name must be a string',
+  PRICE_MUST_BE_A_NUMBER: 'Price must be a number',
+  QUANTITY_MUST_BE_A_NUMBER: 'Quantity must be a number',
+  CATEGORY_MUST_BE_A_STRING: 'Category must be a string',
+  CREATE_PRODUCT_SUCCESS: 'Create product success',
+  GET_PRODUCTS_SUCCESS: 'Get products success',
+  GET_PRODUCT_SUCCESS: 'Get product success',
+  UPDATE_PRODUCT_SUCCESS: 'Update product success'
 }
 
 export const IMAGE_MESSAGES = {

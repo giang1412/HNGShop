@@ -63,3 +63,53 @@ export const imageUrlValidator = validate(
     ['body']
   )
 )
+
+export const updateProductValidator = validate(
+  checkSchema({
+    name: {
+      isString: {
+        errorMessage: PRODUCT_MESSAGES.NAME_MUST_BE_A_STRING
+      },
+      trim: true,
+      isLength: {
+        options: {
+          min: 1,
+          max: 100
+        },
+        errorMessage: PRODUCT_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+      },
+      optional: true
+    },
+    description: {
+      optional: true,
+      isString: {
+        errorMessage: PRODUCT_MESSAGES.DESCRIPTION_MUST_BE_A_STRING
+      },
+      trim: true
+    },
+    price: {
+      optional: true,
+      isNumeric: {
+        errorMessage: PRODUCT_MESSAGES.PRICE_MUST_BE_A_NUMBER
+      }
+    },
+    price_before_discount: {
+      optional: true,
+      isNumeric: {
+        errorMessage: PRODUCT_MESSAGES.PRICE_MUST_BE_A_NUMBER
+      }
+    },
+    quantity: {
+      optional: true,
+      isNumeric: {
+        errorMessage: PRODUCT_MESSAGES.QUANTITY_MUST_BE_A_NUMBER
+      }
+    },
+    category: {
+      optional: true,
+      isString: {
+        errorMessage: PRODUCT_MESSAGES.CATEGORY_MUST_BE_A_STRING
+      }
+    }
+  })
+)

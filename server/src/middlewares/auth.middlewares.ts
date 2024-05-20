@@ -174,8 +174,7 @@ export const loginValidator = validate(
             return true
           }
         }
-      },
-      password: passwordSchema
+      }
     },
     ['body']
   )
